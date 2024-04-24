@@ -7,10 +7,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { MapComponent } from './map/map.component';
-
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   imports: [
+    GoogleMapsModule,
     ReactiveFormsModule,  
     CommonModule,
     FormsModule,

@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Position,Geolocation } from '@capacitor/geolocation';
 import { Subscription } from 'rxjs';
-import { GmapService } from 'src/app/services/gmap/gmap.service';
+import { GmapService } from '../../services/gmap/gmap.service';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-map',
@@ -8,131 +10,181 @@ import { GmapService } from 'src/app/services/gmap/gmap.service';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent  implements OnInit {
+  @ViewChild('divMap') divMap!: ElementRef;
+  @ViewChild('inputPlaces') inputPlaces!: ElementRef;
 
-  @ViewChild('map', {static: true}) mapElementRef!: ElementRef;
-  googleMaps: any;
-  source: any = {};
-  dest: any = {};
-  map: any;
-  directionsService: any;
-  directionsDisplay: any;
-  source_marker: any;
-  destination_marker: any;
-  trackSub!: Subscription;
+  mapa!: google.maps.Map;
+  markers: google.maps.Marker[];
+  distancia!: string;
+  formMapas!: FormGroup;
+  busqueda:FormControl = new FormControl('');
 
-  constructor(
-    private maps: GmapService,
-    private renderer: Renderer2,
-  ) { }
+  constructor(private renderer: Renderer2) {
+    this.markers = [];
 
-  ngOnInit() {
-    this.loadMap();
-    //this.changeMarkerPosition(this.source);
+    this.formMapas = new FormGroup({
+
+      
+      direccion: new FormControl(''),
+      referencia: new FormControl(''),
+      ciudad: new FormControl(''),
+      provincia: new FormControl(''),
+      region: new FormControl('')
+    })
   }
 
-  // ngAfterViewInit() {
-  //   this.loadMap();
-  // }
-
-  async loadMap() {
-    try {
-      console.log('map');
-      let googleMaps: any = await this.maps.loadGoogleMaps();
-      const mapEl = this.mapElementRef.nativeElement;
-      this.map = new googleMaps.Map(mapEl, {
-        center: { lat: 12, lng: 22 },
-        disableDefaultUI: true,
-        zoom: 13,
-      });
-      this.directionsService = new googleMaps.DirectionsService;
-      this.directionsDisplay = new googleMaps.DirectionsRenderer;
-      this.directionsDisplay = new googleMaps.DirectionsRenderer();
-
-      // const sourceIconUrl = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=O|FFFF00|000000';
-      // const destinationIconUrl = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=D|FF0000|000000';
-      const sourceIconUrl = 'assets/imgs/car.png';
-      const destinationIconUrl = 'assets/imgs/pin.png';
-
-      const source_position = new googleMaps.LatLng(12, 22);
-      const destination_position = new googleMaps.LatLng(12, 22);
-
-      const source_icon = {
-        url: sourceIconUrl,
-        scaledSize: new googleMaps.Size(50, 50), // scaled size
-        origin: new googleMaps.Point(0, 0), // origin
-        anchor: new googleMaps.Point(0, 0) // anchor
-      };
-      const destination_icon = {
-        url: destinationIconUrl,
-        scaledSize: new googleMaps.Size(50, 50), // scaled size
-        origin: new googleMaps.Point(0, 0), // origin
-        anchor: new googleMaps.Point(0, 0) // anchor
-      };
-      this.source_marker = new googleMaps.Marker({
-        map: this.map,
-        position: source_position,
-        animation: googleMaps.Animation.DROP,
-        icon: source_icon,
-      });
-
-      this.destination_marker = new googleMaps.Marker({
-        map: this.map,
-        position: destination_position,
-        animation: googleMaps.Animation.DROP,
-        icon: destination_icon
-      });
-
-      this.source_marker.setMap(this.map);
-      this.destination_marker.setMap(this.map);
-
-      this.directionsDisplay.setMap(this.map);
-      this.directionsDisplay.setOptions({
-        polylineOptions: {
-          strokeWeight: 4,
-          strokeOpacity: 1,
-          strokeColor: 'black'
-        },
-        suppressMarkers: true
-      });
-
-      await this.drawRoute();
-
-      this.map.setCenter(source_position);
-      this.renderer.addClass(mapEl, 'visible');
-    } catch(e) {
-      console.log(e);
-    }
+  ngOnInit(): void {
   }
 
-  drawRoute() {
-    this.directionsService.route({
-      origin: this.source,
-      destination: this.dest,
-      travelMode: 'DRIVING',
-      provideRouteAlternatives: true
-    }, (response: { routes: { legs: any[]; }[]; }, status: string) => {
-      if (status === 'OK') {
-        this.directionsDisplay.setDirections(response);
-        console.log('response: ', response);
-        const directionsData = response.routes[0].legs[0];
-        console.log(directionsData);
-        const duration = directionsData.duration.text;
-        console.log(duration);
-      } else {
-        console.log(status);
-      }
+  async ngAfterViewInit() {
+
+   
+    await Geolocation.getCurrentPosition().then(async position=>{
+      
+      await this.cargarMapa(position);
+      this.cargarAutocomplete();
+  
     });
+   
+
+  };
+
+
+
+  onSubmit() {
+    console.log("Datos del formulario: ", this.formMapas.value)
+  };
+
+
+  //calcular ruta
+  mapRuta() {
+
+    const directionService = new google.maps.DirectionsService();
+    const directionRender = new google.maps.DirectionsRenderer();
+
+    directionRender.setMap(this.mapa);
+
+    directionService.route({
+
+      origin: 'Solca, Quito',
+      destination: 'Carolina, Quito',
+      travelMode: google.maps.TravelMode.DRIVING
+
+    }, (resultado:any) => {
+      console.log(resultado);
+      directionRender.setDirections(resultado);
+
+      this.distancia = resultado.routes[0].legs[0].distance.text;
+
+    });
+
   }
 
-  changeMarkerPosition(data: { lat: any; lng: any; }) {
-    const newPosition = { lat: data?.lat, lng: data?.lng }; // Set the new marker position coordinates
-    this.source_marker.setPosition(newPosition);
-    // this.map.panTo(newPosition); // Pan the map to the new marker position
-    this.drawRoute();
+
+
+  private cargarAutocomplete() {
+
+    // const autocomplete = new google.maps.places.Autocomplete(this.renderer.selectRootElement(this.inputPlaces.nativeElement), { })
+
+    const autocomplete = new google.maps.places.Autocomplete(this.renderer.selectRootElement(this.inputPlaces.nativeElement), {
+      componentRestrictions: {
+        country: ["EC"]
+      },
+      fields: ["address_components", "geometry", "place_id"],
+      types: ["address"],
+    })
+
+
+    google.maps.event.addListener(autocomplete, 'place_changed', () => {
+      const place: any = autocomplete.getPlace();
+      console.log("el place completo es:", place)
+
+      this.mapa.setCenter(place.geometry.location);
+      const marker = new google.maps.Marker({
+        position: place.geometry.location
+      });
+
+      marker.setMap(this.mapa);
+      this.llenarFormulario(place);
+    })
   }
 
-  ngOnDestroy(): void {
-      if(this.trackSub) this.trackSub.unsubscribe();
-  }
+  llenarFormulario(place: any) {
+
+    console.log(place)
+    const addressNameFormat: any = {
+      'street_number': 'short_name',
+      'route': 'long_name',
+      'administrative_area_level_1': 'short_name',
+      'administrative_area_level_2': 'short_name',
+      'administrative_area_level_3': 'short_name',
+      'country': 'long_name',
+
+    };
+
+    const getAddressComp = (type: any) => {
+      for (const component of place.address_components) {
+        if (component.types[0] === type) {
+
+          return component[addressNameFormat[type]];
+        }
+      }
+      return ' '
+    };
+
+    const componentForm = {
+      direccion: 'location',
+      ciudad: "administrative_area_level_3",
+      provincia: 'administrative_area_level_2',
+      region: 'administrative_area_level_1'
+    };
+
+
+
+
+    Object.entries(componentForm).forEach(entry => {
+      const [key, value] = entry;
+
+      this.formMapas.controls[key].setValue(getAddressComp(value))
+    });
+
+    this.formMapas.controls['direccion'].setValue(getAddressComp('route') + ' ' + getAddressComp('street_number'))
+  };
+
+  cargarMapa(position: any): any {
+
+    const opciones = {
+      center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+      zoom: 17,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    this.mapa = new google.maps.Map(this.renderer.selectRootElement(this.divMap.nativeElement), opciones)
+
+    const markerPosition = new google.maps.Marker({
+      position: this.mapa.getCenter(),
+      title: "David",
+    });
+
+    markerPosition.setMap(this.mapa);
+    this.markers.push(markerPosition);
+
+    google.maps.event.addListener(this.mapa, 'click', (evento: google.maps.MapMouseEvent) => {
+      const marker = new google.maps.Marker({
+        position: evento.latLng,
+        animation: google.maps.Animation.DROP,
+      });
+      marker.setDraggable(true)
+      marker.setMap(this.mapa);
+
+      google.maps.event.addListener(marker, 'click', (event:any) => { 
+        marker.setMap(null);
+        
+      })
+
+    })
+
+
+  };
 
 }

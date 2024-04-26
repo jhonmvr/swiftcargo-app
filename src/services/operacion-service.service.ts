@@ -68,4 +68,21 @@ export class OperacionServiceService {
       )
     );
   }
+
+  
+  buscarEnvioById(idEnvio: any) {
+    this.storage.appResourcesUrl = 'http://localhost:8080/api/v1/'
+    let serviceUrl = this.storage.appResourcesUrl + "SwiftCargo/buscarEnvioById" ;
+    this.params = new HttpParams();
+
+    this.params = this.params.set('idEnvio', idEnvio);
+
+    let options = { headers: this.headers, params: this.params };
+    return this.http.get(serviceUrl, options).pipe(
+      tap( // Log the result or error
+        (data: any) => data,
+        error => { /*this.HandleError(error, new ReNoticeService(),this.dialog);*/ }
+      )
+    );
+  }
 }

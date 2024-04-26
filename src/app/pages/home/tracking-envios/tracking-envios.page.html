@@ -1,54 +1,89 @@
 <ion-header [translucent]="true">
-    <h1>Listado de envios</h1>
+    <h1 style="margin: 10px;">Listado de envios</h1>
 </ion-header>
 
 <ion-content>
 
-    <ion-card href="javascript:void(0)" *ngFor="let item of lista" (click)="verDetalle(item)">
-        <div class="progress-tracker">
-            <ion-progress-bar value="0.5"></ion-progress-bar>
-            <div class="steps">
-                <div class="step" [ngStyle]="{
-                    'color': item.estado === 'CANCELADO' ? 'orange' : 
-                             item.estado !== 'PENDIENTE' ? 'green' : 'blue'
-                }">
-                    <ion-icon name="checkmark-circle"></ion-icon><span>Pendiente</span>
-                </div>
-                <div class="step" [ngStyle]="{
-                    'color': item.estado === 'CANCELADO' ? 'orange' : 
-                             item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' ? 'green' : 
-                             item.estado === 'EN_CARGA' ? 'blue' : 'grey'
-                }">
-                    <ion-icon name="checkmark-circle"></ion-icon><span>En Carga</span>
-                </div>
-                <div class="step" [ngStyle]="{
-                    'color': item.estado === 'CANCELADO' ? 'orange' : 
-                             item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' && item.estado !== 'EN_TRANSITO' ? 'green' : 
-                             item.estado === 'EN_TRANSITO' ? 'blue' : 'grey'
-                }">
-                    <ion-icon name="ellipse"></ion-icon><span>En Tránsito</span>
-                </div>
-                <div class="step" [ngStyle]="{
-                    'color': item.estado === 'CANCELADO' ? 'orange' : 
-                             item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' && item.estado !== 'EN_TRANSITO' && item.estado !== 'RETRASADO' ? 'green' : 
-                             item.estado === 'RETRASADO' ? 'yellow' : 'grey'
-                }">
-                    <ion-icon name="time"></ion-icon><span>Retrasado</span>
-                </div>
-                <div class="step" [ngStyle]="{
-                    'color': item.estado === 'CANCELADO' ? 'orange' : 
-                             item.estado === 'ENTREGADO' ? 'green' : 'grey'
-                }">
-                    <ion-icon name="stopwatch"></ion-icon><span>Entregado</span>
-                </div>
-                <div *ngIf="item.estado === 'CANCELADO'" class="step" [ngStyle]="{
-                    'color': item.estado === 'CANCELADO' ? 'red' : 'black'
-                }">
-                    <ion-icon name="close-circle"></ion-icon><span>Cancelado</span>
-                </div>
+    <ion-card href="javascript:void(0)" *ngFor="let item of lista" (click)="openLocationModal(item)">
+        <div class="tracking-container">
+            <!-- Pendiente -->
+            <div class="step">
+                <ion-icon name="document-text-outline" class="icon" [ngClass]="{ 'completed': item.estado !== 'PENDIENTE' }"></ion-icon>
+                <span class="status" [ngClass]="{ 'completed': item.estado !== 'PENDIENTE' }">Pendiente</span>
+            </div>
+            <div class="progress-line" [ngClass]="{ 'completed': item.estado !== 'PENDIENTE' }"></div>
 
+            <!-- En Carga -->
+            <div class="step">
+                <ion-icon name="cube-outline" class="icon" [ngClass]="{ 'completed': item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' }"></ion-icon>
+                <span class="status" [ngClass]="{ 'completed': item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' }">En Carga</span>
+            </div>
+            <div class="progress-line" [ngClass]="{ 'completed': item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' }"></div>
+
+            <!-- En Transito -->
+            <div class="step">
+                <ion-icon name="bus-outline" class="icon" [ngClass]="{ 'completed': item.estado === 'EN_TRANSITO' || item.estado === 'ENTREGADO' }"></ion-icon>
+                <span class="status" [ngClass]="{ 'completed': item.estado === 'EN_TRANSITO' || item.estado === 'ENTREGADO' }">En Tránsito</span>
+            </div>
+            <div class="progress-line" [ngClass]="{ 'completed': item.estado === 'EN_TRANSITO' || item.estado === 'ENTREGADO' }"></div>
+
+            <!-- Entregado -->
+            <div class="step">
+                <ion-icon name="checkmark-done-outline" class="icon" [ngClass]="{ 'completed': item.estado === 'ENTREGADO' }"></ion-icon>
+                <span class="status" [ngClass]="{ 'completed': item.estado === 'ENTREGADO' }">Entregado</span>
+            </div>
+            <div *ngIf="item.estado === 'CANCELADO'" class="progress-line" [ngClass]="{ 'completed': item.estado === 'EN_TRANSITO' || item.estado === 'ENTREGADO' }"></div>
+
+            <!-- Cancelado -->
+            <div *ngIf="item.estado === 'CANCELADO'" class="step">
+                <ion-icon name="close-circle" class="icon" style="color: red;"></ion-icon>
+                <span class="status" [ngClass]="{ 'cancel': item.estado === 'CANCELADO' }">Cancelado</span>
             </div>
         </div>
+
     </ion-card>
+    <ion-modal [isOpen]="openModal" [breakpoints]="[0.9]" (didDismiss)="openModal = false" [initialBreakpoint]="0.9">
+        <ng-template>
+            <ion-content color="light">
+                <ion-list>
+                    <ion-list-header color="light">
+                        <ion-label>
+                            DETALLES DEL ENVÍO
+                        </ion-label>
+                    </ion-list-header>
+                    <ion-item-group class="ion-padding">
+                        <ion-item>
+                            <ion-label position="floating">Placa</ion-label>
+                            <ion-input [(ngModel)]="shipment.placa" readonly></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">Fecha Estimada de Llegada</ion-label>
+                            <ion-input [(ngModel)]="shipment.fechaHoraEstimadaLlegada" readonly></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">Dirección de Destino</ion-label>
+                            <ion-input [(ngModel)]="shipment.direccionDestino" readonly></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">Estado</ion-label>
+                            <ion-input [(ngModel)]="shipment.estado" readonly></ion-input>
+                        </ion-item>
+                    </ion-item-group>
+                    <ion-item lines="none">
+                        <ion-label class="ion-text-wrap">
+                            Tu pedido está en camino.
+                        </ion-label>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-label>
+                            <a href="javascript:void(0)" (click)="verDetalle(shipment)">Ver Mapa</a>
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
+
+            </ion-content>
+        </ng-template>
+    </ion-modal>
+
 
 </ion-content>

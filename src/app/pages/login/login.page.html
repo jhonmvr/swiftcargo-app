@@ -1,0 +1,48 @@
+<ion-content>
+    <div class="login-container">
+        <ion-grid>
+            <ion-row class="ion-justify-content-center ion-align-items-center ion-margin-top">
+                <ion-col size-md="6" size-lg="5" size-xl="4">
+                    <div class="login-card">
+                        <ion-img src="/assets/playground_assets/frame2043-ztw.webp" alt="Frame2043"></ion-img>
+                        <ion-text color="primary">
+                            <h1>Bienvenido a SwiftCargo</h1>
+                        </ion-text>
+                        <form [formGroup]="credentials" (ngSubmit)="login()">
+                            <ion-item lines="full">
+                                <ion-label position="stacked">Usuario</ion-label>
+                                <ion-input type="text" placeholder="Nombre de usuario" formControlName="identificacion"></ion-input>
+                            </ion-item>
+                            <div *ngIf="(identificacion.dirty || identificacion.touched) && identificacion.errors" class="error-messages">
+                                <ion-text color="danger" *ngIf="identificacion.errors?.required">Cédula es requerida</ion-text>
+                            </div>
+                            <ion-item lines="full">
+                                <ion-label position="stacked">Contraseña</ion-label>
+                                <ion-input type="password" placeholder="Contraseña" formControlName="contrasena"></ion-input>
+                            </ion-item>
+                            <div *ngIf="(contrasena.dirty || contrasena.touched) && contrasena.errors" class="error-messages">
+                                <ion-text color="danger" *ngIf="contrasena.errors?.required">Contraseña es requerida</ion-text>
+                                <ion-text color="danger" *ngIf="contrasena.errors?.minlength">Contraseña necesita ser de 6 caracteres</ion-text>
+                            </div>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-button type="submit" expand="block" color="primary" [disabled]="!credentials.valid">Iniciar sesión</ion-button>
+                                </ion-col>
+                            </ion-row>
+                            <ion-row>
+                                <ion-col class="ion-text-center">
+                                    <ion-button fill="clear" (click)="olvideContrasena()">Olvidé mi contraseña</ion-button>
+                                </ion-col>
+                            </ion-row>
+                            <ion-row>
+                                <ion-col class="ion-text-center">
+                                    <ion-button fill="clear" (click)="registrarse()">Registrarme</ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </form>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+</ion-content>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "367713405175",
+    "project_id": "switfcargo",
+    "storage_bucket": "switfcargo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367713405175:android:4ada85b57052adb9872bf2",
+        "android_client_info": {
+          "package_name": "com.swift.cargo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC676QZ_F3QizfOvtCeFHy_UXgKrM7ocxg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

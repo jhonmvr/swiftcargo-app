@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+    <h1>Listado de envios</h1>
+</ion-header>
+
+<ion-content>
+
+    <ion-card href="javascript:void(0)" *ngFor="let item of lista" (click)="verDetalle(item)">
+        <div class="progress-tracker">
+            <ion-progress-bar value="0.5"></ion-progress-bar>
+            <div class="steps">
+                <div class="step" [ngStyle]="{
+                    'color': item.estado === 'CANCELADO' ? 'orange' : 
+                             item.estado !== 'PENDIENTE' ? 'green' : 'blue'
+                }">
+                    <ion-icon name="checkmark-circle"></ion-icon><span>Pendiente</span>
+                </div>
+                <div class="step" [ngStyle]="{
+                    'color': item.estado === 'CANCELADO' ? 'orange' : 
+                             item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' ? 'green' : 
+                             item.estado === 'EN_CARGA' ? 'blue' : 'grey'
+                }">
+                    <ion-icon name="checkmark-circle"></ion-icon><span>En Carga</span>
+                </div>
+                <div class="step" [ngStyle]="{
+                    'color': item.estado === 'CANCELADO' ? 'orange' : 
+                             item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' && item.estado !== 'EN_TRANSITO' ? 'green' : 
+                             item.estado === 'EN_TRANSITO' ? 'blue' : 'grey'
+                }">
+                    <ion-icon name="ellipse"></ion-icon><span>En Tránsito</span>
+                </div>
+                <div class="step" [ngStyle]="{
+                    'color': item.estado === 'CANCELADO' ? 'orange' : 
+                             item.estado !== 'PENDIENTE' && item.estado !== 'EN_CARGA' && item.estado !== 'EN_TRANSITO' && item.estado !== 'RETRASADO' ? 'green' : 
+                             item.estado === 'RETRASADO' ? 'yellow' : 'grey'
+                }">
+                    <ion-icon name="time"></ion-icon><span>Retrasado</span>
+                </div>
+                <div class="step" [ngStyle]="{
+                    'color': item.estado === 'CANCELADO' ? 'orange' : 
+                             item.estado === 'ENTREGADO' ? 'green' : 'grey'
+                }">
+                    <ion-icon name="stopwatch"></ion-icon><span>Entregado</span>
+                </div>
+                <div *ngIf="item.estado === 'CANCELADO'" class="step" [ngStyle]="{
+                    'color': item.estado === 'CANCELADO' ? 'red' : 'black'
+                }">
+                    <ion-icon name="close-circle"></ion-icon><span>Cancelado</span>
+                </div>
+
+            </div>
+        </div>
+    </ion-card>
+
+</ion-content>

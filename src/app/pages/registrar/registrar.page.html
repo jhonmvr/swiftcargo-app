@@ -1,0 +1,83 @@
+<app-header-rosadito class="ion-hide-md-up" [titulo]="'Registro '">
+</app-header-rosadito>
+
+<ion-content>
+
+
+    <div class="contentRegistro">
+        <ion-row class="paddingFila">
+            <ion-title class="tituloWeb">
+                Bienvenido a Swiftcargo
+            </ion-title>
+        </ion-row>
+        <ion-row class="paddingFila">
+            <ion-label class="labelInputDatosCliente" position="stacked">Ingresa los campos a continuación</ion-label>
+        </ion-row>
+        <br>
+        <ion-row class="paddingFila">
+            <ion-col size="12">
+                <ion-label class="labelInputDatosCliente" position="stacked">Cédula de identidad</ion-label>
+                <ion-input class="inputDatosCliente" type="text" placeholder="1720812237" [formControl]="identificacion" required></ion-input>
+
+            </ion-col>
+        </ion-row>
+        <ion-row class="paddingFila">
+            <ion-col size="12">
+                <ion-label class="labelInputDatosCliente" position="stacked">Número</ion-label>
+                <ion-input class="inputDatosCliente" type="tel" placeholder="0999999999" [formControl]="telefono"></ion-input>
+                <div *ngIf="(telefono.dirty || telefono.touched) && telefono.errors" class="errors">
+                    <span *ngIf="telefono.errors &&  telefono.errors['required']">El número es requerido</span>
+                    <span *ngIf="telefono.errors && telefono.errors['maxlength']">Máximo 10 dígitos</span>
+                    <span *ngIf="telefono.errors && telefono.errors['minlength']">Mínimo 9 dígitos</span>
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-item>
+            <ion-checkbox slot="start" [formControl]="terminos"></ion-checkbox>
+            <ion-button id="open-modal" fill="clear" expand="block">Acepto terminos y condiciones</ion-button>
+        </ion-item>
+        <ion-row class="paddingFila">
+            <ion-col size="12">
+                <ion-button class="botonPrincipal" expand="block" (click)="registrarme()">Continuar</ion-button>
+
+            </ion-col>
+        </ion-row>
+
+
+    </div>
+
+
+
+    <ion-modal trigger="open-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]" handleBehavior="cycle">
+        <ng-template>
+            <ion-content class="ion-padding">
+                <div class="ion-margin-top">
+                    <ion-label>¿Qué debo hacer si tengo un sitio web de comercio electrónico? ¿Se recomienda crear un documento de términos y condiciones? Sí. De hecho, no solo es recomendable, sino que a menudo es obligatorio. Los términos y condiciones no solo
+                        son de vital importancia para protegerte de posibles responsabilidades, sino que también contienen información legalmente obligatoria, como los derechos del usuario y las políticas de devolución, desistimiento o cancelación.. Por
+                        lo general, un sitio web/app debe tener un documento de Condiciones de servicio válido y preciso siempre que estén en juego problemas complejos, como es el caso del comercio electrónico, donde se trata información confidencial
+                        como los datos de pago. En los sitios web de comercio electrónico, las Condiciones de servicio suelen ser el documento que contiene la información relacionada con las condiciones de venta y los medios de pago, envío, entrega, condiciones
+                        de cancelación y desistimiento, etc., como lo requieren las regulaciones de protección al consumidor. Los proveedores europeos de servicios B2C (venta de bienes/servicios) también deben incluir, entre otras cosas, información sobre
+                        la resolución de litigios en línea (RLL) para explicar el proceso obligatorio de resolución de disputas online. ¿Puedo utilizar una plantilla de términos y condiciones? A pesar de lo sencillos que parecen, los términos y condiciones
+                        están pensados para cumplir con casos increíblemente complejos y muy específicos. Como cada documento de términos y condiciones es un contrato legalmente vinculante cuyo objetivo es protegerte a ti, como titular de la empresa,
+                        es de suma importancia que el documento coincida con tus procesos comerciales específicos y con tu modelo de negocio, y que se mantenga actualizado con las diversas leyes a las que se hace referencia en tu contenido. Las plantillas,
+                        simplemente, no son capaces de hacer esto. Por lo tanto, te recomendamos encarecidamente que evites utilizarlas. Lee nuestra respuesta ampliada a esta pregunta aquí. ¿Qué diferencia hay entre los Términos y Condiciones, las Condiciones
+                        de Servicio y las Condiciones de Uso? En general, no hay diferencia legal. Los términos y condiciones, las condiciones de servicio y las condiciones de uso son nombres que se utilizan para hacer referencia al mismo documento. El
+                        nombre concreto utilizado es simplemente una cuestión de preferencia. Política de privacidad y términos y condiciones: ¿cuál es la diferencia entre estos dos documentos legales? La política de privacidad y los términos y condiciones
+                        son acuerdos legalmente vinculantes, pero: La política de privacidad es legalmente obligatoria en casi todo el mundo. Protege a tus usuarios informándoles de manera legalmente vinculante sobre cómo utilizas sus datos personales
+                        de acuerdo con las leyes de privacidad aplicables. Si bien te da cierto margen de maniobra sobre cuestiones como el manejo de solicitudes de “No rastrear”, generalmente tiene como objetivo proteger a los usuarios (encuentra más
+                        información en nuestro Resumen de los requisitos legales). Los términos y condiciones están destinados a proteger a la empresa (a ti). Te ofrecen la posibilidad de definir (dentro de la ley aplicable) las condiciones de uso de
+                        tu web o servicio, incluidas las disposiciones sobre derechos de autor o límites de edad y la ley que rige el contrato. Si bien no siempre son obligatorios, como sucede con la política de privacidad, es esencial proteger tus intereses
+                        como titular de una empresa. Nuestro plan Ultra incluye todas las ventajas del Pro, lo que te permite: crear una política de privacidad y cookies crear un documento de términos y condiciones utilizar la Cookie Solution hasta 25.000
+                        páginas vistas/mes para un sitio web/app en un idioma. Consulta nuestros precios para obtener más detalles. Personalizable gracias a más de 100 cláusulas, disponible en 9 idiomas, diseñado por un equipo jurídico internacional y
+                        al día con las principales legislaciones internacionales, nuestro Generador de Términos y Condiciones es capaz de manejar incluso las situaciones más complejas y las diferentes necesidades de personalización. Nuestra solución funciona
+                        para empresas de cualquier tamaño, desde bloggers individuales a grandes compañías, protegiendo sus intereses y contenido. Está optimizada para comercio electrónico, marketplace, SaaS, apps móviles, blogs, publicaciones y mucho
+                        más. El proceso de generación es fácil e intuitivo: Empieza a generar tus documentos y selecciona el botón Generar ahora en el “Generador de Términos y Condiciones” en el área de tu web/app. Añade todas las cláusulas que necesites.
+                        Completa toda la información sobre el propietario del sitio web/app y sus datos de contacto. Añade los Términos y Condiciones de iubenda a tu web (la mejor práctica es incluir un enlace en el pie de página, donde tus usuarios o
+                        visitantes pueden encontrarlo en cualquier momento). Para obtener más información, consulta nuestra guía sobre cómo generar un documento de términos y condiciones.
+                    </ion-label>
+                </div>
+            </ion-content>
+        </ng-template>
+    </ion-modal>
+</ion-content>

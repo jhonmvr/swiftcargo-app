@@ -1,0 +1,21 @@
+<ion-content>
+  <ion-list>
+    <ion-icon></ion-icon>
+    
+    <ion-item *ngFor="let  item of listaNumerada" >
+       <div class="circulo"   [ngStyle]="{
+        'border-color': numeroProceso >= item.index ? '#FBB822' : '#BFC6CC',
+        'color': numeroProceso === item.index ? '#FBB822' : '#BFC6CC',
+        'background-color': numeroProceso > item.index ? '#FBB822' : '#FFFFFF'
+      }"> <ng-container *ngIf="numeroProceso > item.index; else showNumber">
+        <ion-icon style="color:#FFFFFF" name="checkmark"></ion-icon>
+      </ng-container>
+      <ng-template #showNumber>{{item.index}}</ng-template>
+    </div>
+      
+    <ion-label [ngStyle]="{
+      'color': numeroProceso >= item.index ? '#E79F00' : '#BFC6CC'
+    }"> {{item.nombre}}</ion-label>
+  </ion-item>
+  </ion-list>
+</ion-content>

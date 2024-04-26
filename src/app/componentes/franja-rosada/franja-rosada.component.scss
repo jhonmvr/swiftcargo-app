@@ -1,0 +1,28 @@
+.header-row {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    padding: 0 16px;
+  }
+  
+  
+  
+  ion-button {
+    margin-left: 16px;
+  }
+  .fondoRosado #main-content{
+    display: none;
+  }
+  @media screen and (max-width: 768px) {
+    .fondoRosado #main-content{
+        display: block;
+    }
+  }
+
+ 

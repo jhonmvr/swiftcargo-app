@@ -1,0 +1,31 @@
+<ion-content>
+    <ion-row class="paddingFila">
+        <ion-col size="12">
+            <p class="textoLabelMasOscuroLight"> Para garantizar la seguridad de tu cuenta, por favor completa la siguiente verificación.</p>
+        </ion-col>
+    </ion-row>
+    <ion-row class="paddingFila">
+        <ion-col size="6">
+            <ion-label class="textoLabelMasOscuroLight">Código de verificación por email</ion-label>
+        </ion-col>
+        <ion-col size="6">
+            <ion-button fill="clear" (click)="enviarCodigo()" [disabled]="!botonActivado"> {{estadoCodigo}} </ion-button>
+        </ion-col>
+    </ion-row>
+    <ion-row class="paddingFila">
+        <ion-col size="12">
+            <ion-input type="text" class="inputDatosCliente" [formControl]="inputCodigo"></ion-input>
+        </ion-col>
+    </ion-row>
+    
+    <ion-row class="paddingFila" *ngIf="disableMensajeButton | async">
+        <ion-col size="12">
+            <p class="textoLabelMasOscuroLight"> Se envió el código al correo </p>
+        </ion-col>
+    </ion-row>
+    <ion-row class="paddingFila">
+        <ion-col size="12">
+            <ion-button expand="block" [disabled]="inputCodigo.invalid" (click)="completed()" class="botonPrincipal">Finalizar Proceso</ion-button>
+        </ion-col>
+    </ion-row>
+</ion-content>

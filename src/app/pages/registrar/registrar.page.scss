@@ -1,0 +1,26 @@
+ion-toolbar.large-title-fix {
+    padding-top: env(safe-area-inset-top);
+}
+
+
+.purple-container-registro{
+    background: #E03B87 ;
+    position:relative; 
+    left: -60px;
+  
+    width: 100%;
+    height: 138px;
+    border-radius: 0px 0px 90% 65%;
+
+}
+.yellow-container-registro{
+    position:relative;
+    left: 60px;
+    top: -30px;
+    background: #FBB822 ;
+    width: 100%;
+    height: 138px;
+    justify-content: center;
+    border-radius: 0px 0px 90% 65%;
+   
+}

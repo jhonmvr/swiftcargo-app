@@ -1,0 +1,18 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>
+            Live Tracking
+        </ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="openLocationModal()">
+                <ion-icon name="location"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <app-map [pos]="pos"></app-map>
+
+
+</ion-content>

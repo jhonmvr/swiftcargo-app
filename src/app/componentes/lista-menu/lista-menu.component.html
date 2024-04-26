@@ -1,0 +1,18 @@
+<ion-list>
+    <ion-button slot="end" expand="block" fill="clear" color="dark" class="marginButton" (click)="goHome()">
+        <ion-icon class="ionIconLeft" name="home" slot="start" routerLink="/home"></ion-icon> Home
+        <ion-icon color="primary" class="ionIconRight" name="arrow-forward" slot="end"></ion-icon>
+    </ion-button>
+    <ion-button expand="block" fill="clear" color="dark" (click)="verNotificaciones()" class="marginButton">
+        <ion-icon class="ionIconLeft" name="notifications" slot="start"></ion-icon> Notificaciones
+        <ion-icon color="primary" class="ionIconRight" name="arrow-forward" slot="end"></ion-icon>
+    </ion-button>
+    <ion-button expand="block" fill="clear" color="dark" (click)="cambiarContrasena()">
+        <ion-icon class="ionIconLeft" name="key" slot="start"></ion-icon> Cambiar de contraseña
+        <ion-icon color="primary" class="ionIconRight" name="arrow-forward" slot="end"></ion-icon>
+    </ion-button>
+    <ion-button expand="block" fill="clear" color="dark" (click)="logout()" class="marginButton">
+        <ion-icon class="ionIconLeft" name="log-out" slot="start"></ion-icon> Cerrar sesión
+        <ion-icon color="primary" class="ionIconRight" name="arrow-forward" slot="end"></ion-icon>
+    </ion-button>
+</ion-list>
